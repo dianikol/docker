@@ -5,3 +5,20 @@
  */
 
 include_once 'vacations_excursions.features.inc';
+
+/**
+ * Implements hook_node_validate()
+ */
+function vacations_excursions_node_validate($node, $form, &$form_state) {
+  if ($node->type == 'excursion') {
+    // Get the value of the field
+    $wrapper = entity_metadata_wrapper('node', $node);
+    $code = $wrapper->field_package_code->value();
+
+    // Check that the value has 5 digits
+    if (strlen($code) != 5)
+    {
+      form_set_error('field_package_code', t('Package code needs to be 5 digits'));
+    }
+  }
+}
