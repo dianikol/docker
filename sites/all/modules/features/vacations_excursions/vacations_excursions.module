@@ -20,5 +20,19 @@ function vacations_excursions_node_validate($node, $form, &$form_state) {
     {
       form_set_error('field_package_code', t('Package code needs to be 5 digits'));
     }
+
+    // Check that the value is unique
+    // Execute a count query to see if there's other similar values.
+    $query = new EntityFieldQuery;
+    $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'excursion')
+      ->fieldCondition('field_package_code','value', $code, '=')
+      ->count();
+    $count = $query->execute();
+
+    if ($count > 0)
+    {
+      form_set_error('field_package_code', t('Package code %code already exists', array('%code' => $code)));
+    }
   }
 }
