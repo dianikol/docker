@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Vacations Excursions feature.
+ */
+
+include_once 'vacations_excursions.features.inc';

@@ -1,0 +1,16 @@
+name = Vacations Excursions
+description = Excursions content type and pages
+core = 7.x
+package = Vacations
+version = 7.x-1.0-beta1
+dependencies[] = features
+dependencies[] = number
+dependencies[] = text
+dependencies[] = vacations_destinations
+features[features_api][] = api:2
+features[field_base][] = field_package_code
+features[field_instance][] = node-excursion-field_description
+features[field_instance][] = node-excursion-field_package_code
+features[node][] = excursion
+features_exclude[field_base][field_description] = field_description
+project path = sites/all/modules/features
