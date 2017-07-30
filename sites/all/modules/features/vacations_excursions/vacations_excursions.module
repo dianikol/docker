@@ -7,7 +7,7 @@
 include_once 'vacations_excursions.features.inc';
 
 /**
- * Implements hook_node_validate()
+ * Implements hook_node_validate().
  */
 function vacations_excursions_node_validate($node, $form, &$form_state) {
   if ($node->type == 'excursion') {
@@ -24,10 +24,15 @@ function vacations_excursions_node_validate($node, $form, &$form_state) {
     // Check that the value is unique
     // Execute a count query to see if there's other similar values.
     $query = new EntityFieldQuery;
+
+    if ($node->nid) {
+      $query->entityCondition('entity_id', $node->nid, '!=');
+    }
     $query->entityCondition('entity_type', 'node')
       ->entityCondition('bundle', 'excursion')
       ->fieldCondition('field_package_code','value', $code, '=')
       ->count();
+
     $count = $query->execute();
 
     if ($count > 0)
