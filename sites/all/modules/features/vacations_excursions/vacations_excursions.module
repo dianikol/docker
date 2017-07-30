@@ -41,3 +41,151 @@ function vacations_excursions_node_validate($node, $form, &$form_state) {
     }
   }
 }
+
+/**
+ * Implements hook_field_info().
+ */
+function vacations_excursions_field_info() {
+  return array(
+    'field_schedule' => array(
+      'label' => t('Departure schedule'),
+      'description' => t('The information on the schedule of the departure'),
+      'default_widget' => 'field_schedule_widget',
+      'default_formatter' => 'field_schedule_formatter',
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_info().
+ */
+function vacations_excursions_field_widget_info() {
+  return array(
+    'field_schedule_widget' => array(
+      'label' => t('Schedule'),
+      'field types' => array('field_schedule'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_is_empty().
+ */
+function vacations_excursions_field_is_empty($item, $field) {
+  return (($item['duration'] == 0) || ($item['destination'] == 0) || ($item['fid'] == ''));
+}
+
+/**
+ * Implements hook_field_widget_form().
+ */
+function vacations_excursions_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  // Get the values in case they exist
+  if (isset($items[$delta]['date'])) {
+    $date = $items[$delta]['date'];
+    // Date value is in different format so we need to convert it
+    $date = getdate(strtotime($date));
+    $date_value = array(
+      'day' => $date['mday'],
+      'month' => $date['mon'],
+      'year' => $date['year'],
+    );
+  }
+  else {
+    $date_value = '';
+  }
+
+  $duration_value = isset($items[$delta]['date']) ? $items[$delta]['duration'] : 0;
+  $destination_value = isset($items[$delta]['date']) ? $items[$delta]['destination'] : 0;
+  $fid = isset($items[$delta]['date']) ? $items[$delta]['fid'] : '';
+
+  $element['#delta'] = $delta;
+
+  switch ($instance['widget']['type']) {
+
+    case 'field_schedule_widget':
+      $element['date'] = array(
+        '#type' => 'date',
+        '#title' => t('Date'),
+        '#default_value' => $date_value,
+      );
+      $element['duration'] = array(
+        '#type' => 'select',
+        '#title' => t('Duration'),
+        '#options' => array(0, 1, 2, 3, 4),
+        '#default_value' => $duration_value,
+      );
+
+      // For the destination possible values we need all the Destination nodes
+      $query = new EntityFieldQuery;
+      $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'destination');
+      $result = $query->execute();
+
+      $options = array(0 => t('-Select-'));
+      if (isset($result['node'])) {
+        $destination_nids = array_keys($result['node']);
+        $destinations = entity_load('node', $destination_nids);
+
+        foreach ($destinations as $destination) {
+          $options[$destination->nid] = $destination->title;
+        }
+      }
+
+      $element['destination'] = array(
+        '#type' => 'select',
+        '#title' => t('Destination'),
+        '#options' => $options,
+        '#default_value' => $destination_value,
+      );
+      $element['fid'] = array(
+        '#type' => 'file',
+        '#title' => t('Brochure'),
+        '#default_value' => $fid,
+      );
+
+    break;
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function vacations_excursions_field_formatter_info() {
+  return array(
+    'field_schedule_formatter' => array(
+      'label' => t('Schedule'),
+      'field types' => array('field_schedule'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function vacations_excursions_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+
+  switch ($display['type']) {
+    case 'field_schedule_formatter':
+      foreach ($items as $delta => $item) {
+        // Get the entity of the destination node in order to use the title afterwards
+        $destination = entity_load('node', array($item['destination']));
+
+        $element[$delta] = array(
+          '#type' => 'html_tag',
+          '#tag' => 'p',
+          '#value' => t('Date: %date <br> Duration: %duration days<br> Destination: %destination <br> Brochure: ', array(
+            '%date' => substr($item['date'], 0, 10),
+            '%duration' => $item['duration'],
+            '%destination' => $destination[$item['destination']]->title,
+          ))
+        );
+      }
+
+    break;
+  }
+
+  return $element;
+}

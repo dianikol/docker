@@ -1,0 +1,63 @@
+<?php
+/**
+ * @file
+ * Install, update and uninstall functions for the Vacations Excursions feature.
+ */
+
+/**
+ * Implements hook_field_schema().
+ */
+function vacations_excursions_field_schema($field) {
+
+  $columns = array(
+    'date' => array(
+      'type' => 'datetime',
+      'mysql_type' => 'datetime',
+      'pgsql_type' => 'timestamp without time zone',
+      'sqlite_type' => 'varchar',
+      'sqlsrv_type' => 'smalldatetime',
+      'not null' => FALSE,
+      'sortable' => TRUE,
+      'views' => TRUE,
+    ),
+    'duration' => array(
+      'type' => 'int',
+      'not null' => FALSE,
+      'sortable' => TRUE,
+      'views' => TRUE,
+    ),
+    'destination' => array(
+      'type' => 'int',
+      'not null' => FALSE,
+      'sortable' => TRUE,
+      'views' => TRUE,
+    ),
+    'fid' => array(
+      'description' => 'The {file_managed}.fid being referenced in this field.',
+      'type' => 'int',
+      'not null' => FALSE,
+      'unsigned' => TRUE,
+    ),
+  );
+
+  $indexes = array(
+    'date' => array('date'),
+  );
+
+  $foreign_keys = array(
+    'destination' => array(
+      'table' => 'node',
+      'columns' => array('nid' => 'nid'),
+    ),
+    'fid' => array(
+      'table' => 'file_managed',
+      'columns' => array('fid' => 'fid'),
+    ),
+  );
+
+  return array(
+    'columns' => $columns,
+    'indexes' => $indexes,
+    'foreign keys' => $foreign_keys,
+  );
+}
