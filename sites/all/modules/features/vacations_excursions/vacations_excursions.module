@@ -1,0 +1,213 @@
+<?php
+/**
+ * @file
+ * Code for the Vacations Excursions feature.
+ */
+
+include_once 'vacations_excursions.features.inc';
+
+/**
+ * Implements hook_node_validate().
+ */
+function vacations_excursions_node_validate($node, $form, &$form_state) {
+  if ($node->type == 'excursion') {
+    // Get the value of the field
+    $wrapper = entity_metadata_wrapper('node', $node);
+    $code = $wrapper->field_package_code->value();
+
+    // Check that the value has 5 digits
+    if (strlen($code) != 5)
+    {
+      form_set_error('field_package_code', t('Package code needs to be 5 digits'));
+    }
+
+    // Check that the value is unique
+    // Execute a count query to see if there's other similar values.
+    $query = new EntityFieldQuery;
+
+    if ($node->nid) {
+      $query->entityCondition('entity_id', $node->nid, '!=');
+    }
+    $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'excursion')
+      ->fieldCondition('field_package_code','value', $code, '=')
+      ->count();
+
+    $count = $query->execute();
+
+    if ($count > 0)
+    {
+      form_set_error('field_package_code', t('Package code %code already exists', array('%code' => $code)));
+    }
+  }
+}
+
+/**
+ * Implements hook_field_info().
+ */
+function vacations_excursions_field_info() {
+  return array(
+    'field_schedule' => array(
+      'label' => t('Departure schedule'),
+      'description' => t('The information on the schedule of the departure'),
+      'default_widget' => 'field_schedule_widget',
+      'default_formatter' => 'field_schedule_formatter',
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_info().
+ */
+function vacations_excursions_field_widget_info() {
+  return array(
+    'field_schedule_widget' => array(
+      'label' => t('Schedule'),
+      'field types' => array('field_schedule'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_is_empty().
+ */
+function vacations_excursions_field_is_empty($item, $field) {
+  return (($item['duration'] == 0) || ($item['destination'] == 0) || ($item['fid'] == ''));
+}
+
+/**
+ * Implements hook_field_widget_form().
+ */
+function vacations_excursions_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  // Get the values in case they exist
+  if (isset($items[$delta]['date'])) {
+    $date = $items[$delta]['date'];
+    // Date value is in different format so we need to convert it
+    $date = getdate(strtotime($date));
+    $date_value = array(
+      'day' => $date['mday'],
+      'month' => $date['mon'],
+      'year' => $date['year'],
+    );
+  }
+  else {
+    $date_value = '';
+  }
+
+  $duration_value = isset($items[$delta]['duration']) ? $items[$delta]['duration'] : 0;
+  $destination_value = isset($items[$delta]['destination']) ? $items[$delta]['destination'] : 0;
+  $fid = isset($items[$delta]['fid']) ? $items[$delta]['fid'] : '';
+
+  $element['#delta'] = $delta;
+
+  switch ($instance['widget']['type']) {
+
+    case 'field_schedule_widget':
+      $element['date'] = array(
+        '#type' => 'date',
+        '#title' => t('Date'),
+        '#default_value' => $date_value,
+      );
+      $element['duration'] = array(
+        '#type' => 'select',
+        '#title' => t('Duration'),
+        '#options' => array(0, 1, 2, 3, 4),
+        '#default_value' => $duration_value,
+      );
+
+      // For the destination possible values we need all the Destination nodes
+      $query = new EntityFieldQuery;
+      $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'destination');
+      $result = $query->execute();
+
+      $options = array(0 => t('-Select-'));
+      if (isset($result['node'])) {
+        $destination_nids = array_keys($result['node']);
+        $destinations = entity_load('node', $destination_nids);
+
+        foreach ($destinations as $destination) {
+          $options[$destination->nid] = $destination->title;
+        }
+      }
+
+      $element['destination'] = array(
+        '#type' => 'select',
+        '#title' => t('Destination'),
+        '#options' => $options,
+        '#default_value' => $destination_value,
+      );
+      $element['fid'] = array(
+        '#type' => 'managed_file',
+        '#title' => t('Brochure'),
+        '#default_value' => $fid,
+        '#upload_location' => 'public://brochure/'
+      );
+
+    break;
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_field_presave().
+ */
+function vacations_excursions_field_presave($entity_type, $entity, $field, $instance, $langcode, &$items) {
+  if ($field['type'] = 'field_schedule') {
+    foreach ($items as $delta => $item) {
+      // Get the date in a timestamp
+      $date = strtotime(implode('/', $items[$delta]['date']));
+      // Get the date in a datetime format
+      $date = date('Y-m-d H:i:s', $date);
+
+      // Alter the values to be compatible for the database
+      $items[$delta]['date'] = $date;
+    }
+  }
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function vacations_excursions_field_formatter_info() {
+  return array(
+    'field_schedule_formatter' => array(
+      'label' => t('Schedule'),
+      'field types' => array('field_schedule'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function vacations_excursions_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+
+  switch ($display['type']) {
+    case 'field_schedule_formatter':
+      foreach ($items as $delta => $item) {
+        // Get the entity of the destination node in order to use the title afterwards
+        $destination = entity_load('node', array($item['destination']));
+        // Get the entity of the file in order to display it
+        $file = entity_load('file', array($item['fid']));
+        // Get the icon for the file
+        $icon = theme('file_icon', array('file' => $file[$item['fid']]));
+
+        $element[$delta] = array(
+          '#type' => 'html_tag',
+          '#tag' => 'p',
+          '#value' => t('Date: %date <br> Duration: %duration days<br> Destination: %destination <br> Brochure: ', array(
+            '%date' => substr($item['date'], 0, 10),
+            '%duration' => $item['duration'],
+            '%destination' => $destination[$item['destination']]->title,
+          )) . '<span class="file">' . $icon . ' ' . l($file[$item['fid']]->filename, file_create_url($file[$item['fid']]->uri)) . '</span>'
+        );
+      }
+
+    break;
+  }
+
+  return $element;
+}
