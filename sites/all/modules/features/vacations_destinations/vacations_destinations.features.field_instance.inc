@@ -36,6 +36,7 @@ function vacations_destinations_field_default_field_instances() {
     'label' => 'Country',
     'required' => 1,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -76,6 +77,7 @@ function vacations_destinations_field_default_field_instances() {
     'label' => 'Description',
     'required' => 1,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
       'text_processing' => 1,
       'user_register_form' => FALSE,
     ),
@@ -120,6 +122,7 @@ function vacations_destinations_field_default_field_instances() {
     'settings' => array(
       'alt_field' => 1,
       'default_image' => 0,
+      'entity_translation_sync' => FALSE,
       'file_directory' => 'destinations',
       'file_extensions' => 'png gif jpg jpeg',
       'max_filesize' => '',
