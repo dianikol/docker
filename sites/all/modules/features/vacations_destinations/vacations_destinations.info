@@ -16,6 +16,7 @@ features[field_base][] = field_photos
 features[field_instance][] = node-destination-field_country
 features[field_instance][] = node-destination-field_description
 features[field_instance][] = node-destination-field_photos
+features[field_instance][] = node-destination-title_field
 features[node][] = destination
 features[variable][] = comment_anonymous_destination
 features[variable][] = comment_default_mode_destination

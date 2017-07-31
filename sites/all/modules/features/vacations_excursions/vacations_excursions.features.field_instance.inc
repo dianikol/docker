@@ -193,6 +193,7 @@ function vacations_excursions_field_default_field_instances() {
   t('Departure Schedule');
   t('Description');
   t('Package code');
+  t('Title');
 
   return $field_instances;
 }
