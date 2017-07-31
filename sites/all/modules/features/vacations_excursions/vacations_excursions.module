@@ -138,9 +138,10 @@ function vacations_excursions_field_widget_form(&$form, &$form_state, $field, $i
         '#default_value' => $destination_value,
       );
       $element['fid'] = array(
-        '#type' => 'file',
+        '#type' => 'managed_file',
         '#title' => t('Brochure'),
         '#default_value' => $fid,
+        '#upload_location' => 'public://brochure/'
       );
 
     break;
@@ -189,6 +190,10 @@ function vacations_excursions_field_formatter_view($entity_type, $entity, $field
       foreach ($items as $delta => $item) {
         // Get the entity of the destination node in order to use the title afterwards
         $destination = entity_load('node', array($item['destination']));
+        // Get the entity of the file in order to display it
+        $file = entity_load('file', array($item['fid']));
+        // Get the icon for the file
+        $icon = theme('file_icon', array('file' => $file[$item['fid']]));
 
         $element[$delta] = array(
           '#type' => 'html_tag',
@@ -197,7 +202,7 @@ function vacations_excursions_field_formatter_view($entity_type, $entity, $field
             '%date' => substr($item['date'], 0, 10),
             '%duration' => $item['duration'],
             '%destination' => $destination[$item['destination']]->title,
-          ))
+          )) . '<span class="file">' . $icon . ' ' . l($file[$item['fid']]->filename, file_create_url($file[$item['fid']]->uri)) . '</span>'
         );
       }
 
