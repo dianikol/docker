@@ -58,10 +58,12 @@ function vacations_excursions_views_default_views() {
   $handler->display->display_options['filters']['type']['value'] = array(
     'excursion' => 'excursion',
   );
+  $handler->display->display_options['filters']['type']['group'] = 1;
   /* Filter criterion: Content: Package code (field_package_code) */
   $handler->display->display_options['filters']['field_package_code_value']['id'] = 'field_package_code_value';
   $handler->display->display_options['filters']['field_package_code_value']['table'] = 'field_data_field_package_code';
   $handler->display->display_options['filters']['field_package_code_value']['field'] = 'field_package_code_value';
+  $handler->display->display_options['filters']['field_package_code_value']['group'] = 1;
   $handler->display->display_options['filters']['field_package_code_value']['exposed'] = TRUE;
   $handler->display->display_options['filters']['field_package_code_value']['expose']['operator_id'] = 'field_package_code_value_op';
   $handler->display->display_options['filters']['field_package_code_value']['expose']['label'] = 'Package code';
@@ -72,10 +74,26 @@ function vacations_excursions_views_default_views() {
     1 => 0,
     3 => 0,
   );
+  /* Filter criterion: Content: Departure Schedule (field_departure_schedule:destination) */
+  $handler->display->display_options['filters']['field_departure_schedule_destination']['id'] = 'field_departure_schedule_destination';
+  $handler->display->display_options['filters']['field_departure_schedule_destination']['table'] = 'field_data_field_departure_schedule';
+  $handler->display->display_options['filters']['field_departure_schedule_destination']['field'] = 'field_departure_schedule_destination';
+  $handler->display->display_options['filters']['field_departure_schedule_destination']['group'] = 1;
+  $handler->display->display_options['filters']['field_departure_schedule_destination']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_departure_schedule_destination']['expose']['operator_id'] = 'field_departure_schedule_destination_op';
+  $handler->display->display_options['filters']['field_departure_schedule_destination']['expose']['label'] = 'Destination';
+  $handler->display->display_options['filters']['field_departure_schedule_destination']['expose']['operator'] = 'field_departure_schedule_destination_op';
+  $handler->display->display_options['filters']['field_departure_schedule_destination']['expose']['identifier'] = 'field_departure_schedule_destination';
+  $handler->display->display_options['filters']['field_departure_schedule_destination']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    3 => 0,
+  );
   /* Filter criterion: Content: Departure Schedule (field_departure_schedule:duration) */
   $handler->display->display_options['filters']['field_departure_schedule_duration']['id'] = 'field_departure_schedule_duration';
   $handler->display->display_options['filters']['field_departure_schedule_duration']['table'] = 'field_data_field_departure_schedule';
   $handler->display->display_options['filters']['field_departure_schedule_duration']['field'] = 'field_departure_schedule_duration';
+  $handler->display->display_options['filters']['field_departure_schedule_duration']['group'] = 1;
   $handler->display->display_options['filters']['field_departure_schedule_duration']['exposed'] = TRUE;
   $handler->display->display_options['filters']['field_departure_schedule_duration']['expose']['operator_id'] = 'field_departure_schedule_duration_op';
   $handler->display->display_options['filters']['field_departure_schedule_duration']['expose']['label'] = 'Duration';
@@ -110,6 +128,7 @@ function vacations_excursions_views_default_views() {
     t('next ›'),
     t('last »'),
     t('Package code'),
+    t('Destination'),
     t('Duration'),
     t('Page'),
   );
