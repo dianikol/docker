@@ -211,3 +211,36 @@ function vacations_excursions_field_formatter_view($entity_type, $entity, $field
 
   return $element;
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function vacations_excursions_form_views_exposed_form_alter(&$form, &$form_state) {
+  if ($form_state['view']->name = 'excursions') {
+    $form['field_departure_schedule_duration'] = array(
+      '#type' => 'select',
+      '#options' => array('' => t('-Select-'), 1 => 1, 2 => 2, 3 => 3, 4 => 4),
+    );
+
+    // For the destination possible values we need all the Destination nodes
+    $query = new EntityFieldQuery;
+    $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'destination');
+    $result = $query->execute();
+
+    $options = array('' => t('-Select-'));
+    if (isset($result['node'])) {
+      $destination_nids = array_keys($result['node']);
+      $destinations = entity_load('node', $destination_nids);
+
+      foreach ($destinations as $destination) {
+        $options[$destination->nid] = $destination->title;
+      }
+    }
+
+    $form['field_departure_schedule_destination'] = array(
+      '#type' => 'select',
+      '#options' => $options,
+    );
+  }
+}
