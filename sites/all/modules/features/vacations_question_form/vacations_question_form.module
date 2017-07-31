@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Vacations Question Form feature.
+ */
+
+include_once 'vacations_question_form.features.inc';
