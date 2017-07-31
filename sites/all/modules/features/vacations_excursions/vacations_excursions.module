@@ -94,9 +94,9 @@ function vacations_excursions_field_widget_form(&$form, &$form_state, $field, $i
     $date_value = '';
   }
 
-  $duration_value = isset($items[$delta]['date']) ? $items[$delta]['duration'] : 0;
-  $destination_value = isset($items[$delta]['date']) ? $items[$delta]['destination'] : 0;
-  $fid = isset($items[$delta]['date']) ? $items[$delta]['fid'] : '';
+  $duration_value = isset($items[$delta]['duration']) ? $items[$delta]['duration'] : 0;
+  $destination_value = isset($items[$delta]['destination']) ? $items[$delta]['destination'] : 0;
+  $fid = isset($items[$delta]['fid']) ? $items[$delta]['fid'] : '';
 
   $element['#delta'] = $delta;
 
