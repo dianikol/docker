@@ -28,7 +28,7 @@ function vacations_destinations_field_default_field_bases() {
       'entity_translation_sync' => FALSE,
       'max_length' => 255,
     ),
-    'translatable' => 0,
+    'translatable' => 1,
     'type' => 'text',
   );
 
@@ -46,10 +46,10 @@ function vacations_destinations_field_default_field_bases() {
     ),
     'locked' => 0,
     'module' => 'text',
-    'translatable' => 0,
     'settings' => array(
       'entity_translation_sync' => FALSE,
     ),
+    'translatable' => 1,
     'type' => 'text_long',
   );
 
