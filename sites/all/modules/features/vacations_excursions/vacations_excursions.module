@@ -150,6 +150,23 @@ function vacations_excursions_field_widget_form(&$form, &$form_state, $field, $i
 }
 
 /**
+ * Implements hook_field_presave().
+ */
+function vacations_excursions_field_presave($entity_type, $entity, $field, $instance, $langcode, &$items) {
+  if ($field['type'] = 'field_schedule') {
+    foreach ($items as $delta => $item) {
+      // Get the date in a timestamp
+      $date = strtotime(implode('/', $items[$delta]['date']));
+      // Get the date in a datetime format
+      $date = date('Y-m-d H:i:s', $date);
+
+      // Alter the values to be compatible for the database
+      $items[$delta]['date'] = $date;
+    }
+  }
+}
+
+/**
  * Implements hook_field_formatter_info().
  */
 function vacations_excursions_field_formatter_info() {
