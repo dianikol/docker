@@ -45,7 +45,10 @@ function vacations_excursions_views_default_views() {
   $handler->display->display_options['fields']['field_departure_schedule']['id'] = 'field_departure_schedule';
   $handler->display->display_options['fields']['field_departure_schedule']['table'] = 'field_data_field_departure_schedule';
   $handler->display->display_options['fields']['field_departure_schedule']['field'] = 'field_departure_schedule';
+  $handler->display->display_options['fields']['field_departure_schedule']['label'] = '';
+  $handler->display->display_options['fields']['field_departure_schedule']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_departure_schedule']['click_sort_column'] = 'date';
+  $handler->display->display_options['fields']['field_departure_schedule']['type'] = 'field_schedule_info';
   $handler->display->display_options['fields']['field_departure_schedule']['delta_offset'] = '0';
   /* Sort criterion: Content: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
@@ -86,7 +89,6 @@ function vacations_excursions_views_default_views() {
     t('‹ previous'),
     t('next ›'),
     t('last »'),
-    t('Departure Schedule'),
     t('Page'),
   );
   $export['excursion_info'] = $view;
