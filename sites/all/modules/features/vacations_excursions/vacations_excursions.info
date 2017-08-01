@@ -40,5 +40,6 @@ features[variable][] = node_submitted_excursion
 features[views_view][] = excursion_info
 features[views_view][] = excursions
 features_exclude[field_base][field_description] = field_description
+files[] = vacations_excursions.views.inc
 project path = sites/all/modules/features
 required = 1
