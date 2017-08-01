@@ -125,9 +125,11 @@ function vacations_base_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'language_negotiation_language_content';
   $strongarm->value = array(
-    'locale-interface' => array(
+    'locale-url' => array(
       'callbacks' => array(
-        'language' => 'locale_language_from_interface',
+        'language' => 'locale_language_from_url',
+        'switcher' => 'locale_language_switcher_url',
+        'url_rewrite' => 'locale_language_url_rewrite_url',
       ),
       'file' => 'includes/locale.inc',
     ),
