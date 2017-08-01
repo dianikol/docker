@@ -53,6 +53,7 @@ function vacations_excursions_views_default_views() {
   $handler->display->display_options['fields']['title_field']['field'] = 'title_field';
   $handler->display->display_options['fields']['title_field']['relationship'] = 'field_departure_schedule_destination';
   $handler->display->display_options['fields']['title_field']['label'] = 'Destination';
+  $handler->display->display_options['fields']['title_field']['element_label_type'] = 'strong';
   $handler->display->display_options['fields']['title_field']['link_to_entity'] = 0;
   /* Field: Content: Departure Schedule */
   $handler->display->display_options['fields']['field_departure_schedule']['id'] = 'field_departure_schedule';
@@ -68,17 +69,20 @@ function vacations_excursions_views_default_views() {
   $handler->display->display_options['fields']['field_country']['table'] = 'field_data_field_country';
   $handler->display->display_options['fields']['field_country']['field'] = 'field_country';
   $handler->display->display_options['fields']['field_country']['relationship'] = 'field_departure_schedule_destination';
+  $handler->display->display_options['fields']['field_country']['element_label_type'] = 'strong';
   /* Field: Content: Photos */
   $handler->display->display_options['fields']['field_photos']['id'] = 'field_photos';
   $handler->display->display_options['fields']['field_photos']['table'] = 'field_data_field_photos';
   $handler->display->display_options['fields']['field_photos']['field'] = 'field_photos';
   $handler->display->display_options['fields']['field_photos']['relationship'] = 'field_departure_schedule_destination';
+  $handler->display->display_options['fields']['field_photos']['element_label_type'] = 'strong';
   $handler->display->display_options['fields']['field_photos']['click_sort_column'] = 'fid';
   $handler->display->display_options['fields']['field_photos']['settings'] = array(
     'image_style' => 'medium',
     'image_link' => '',
   );
   $handler->display->display_options['fields']['field_photos']['delta_offset'] = '0';
+  $handler->display->display_options['fields']['field_photos']['separator'] = '';
   /* Sort criterion: Content: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';

@@ -216,7 +216,7 @@ function vacations_excursions_field_formatter_view($entity_type, $entity, $field
         $element[$delta] = array(
           '#type' => 'html_tag',
           '#tag' => 'p',
-          '#value' => t('Duration: %duration days<br>Date: %date', array(
+          '#value' => t('<strong>Duration:</strong><br>%duration days<br><strong>Date:</strong>%date', array(
               '%date' => substr($item['date'], 0, 10),
               '%duration' => $item['duration'],
             )),
