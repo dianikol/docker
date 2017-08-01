@@ -32,6 +32,12 @@ function vacations_excursions_views_default_views() {
   $handler->display->display_options['pager']['options']['items_per_page'] = '10';
   $handler->display->display_options['style_plugin'] = 'default';
   $handler->display->display_options['row_plugin'] = 'fields';
+  /* Relationship: Content: Get content */
+  $handler->display->display_options['relationships']['field_departure_schedule_destination']['id'] = 'field_departure_schedule_destination';
+  $handler->display->display_options['relationships']['field_departure_schedule_destination']['table'] = 'field_data_field_departure_schedule';
+  $handler->display->display_options['relationships']['field_departure_schedule_destination']['field'] = 'field_departure_schedule_destination';
+  $handler->display->display_options['relationships']['field_departure_schedule_destination']['label'] = 'Destination';
+  $handler->display->display_options['relationships']['field_departure_schedule_destination']['required'] = TRUE;
   /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
@@ -41,6 +47,13 @@ function vacations_excursions_views_default_views() {
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
   $handler->display->display_options['fields']['title']['element_label_type'] = 'h2';
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title_field']['id'] = 'title_field';
+  $handler->display->display_options['fields']['title_field']['table'] = 'field_data_title_field';
+  $handler->display->display_options['fields']['title_field']['field'] = 'title_field';
+  $handler->display->display_options['fields']['title_field']['relationship'] = 'field_departure_schedule_destination';
+  $handler->display->display_options['fields']['title_field']['label'] = 'Destination';
+  $handler->display->display_options['fields']['title_field']['link_to_entity'] = 0;
   /* Field: Content: Departure Schedule */
   $handler->display->display_options['fields']['field_departure_schedule']['id'] = 'field_departure_schedule';
   $handler->display->display_options['fields']['field_departure_schedule']['table'] = 'field_data_field_departure_schedule';
@@ -50,6 +63,22 @@ function vacations_excursions_views_default_views() {
   $handler->display->display_options['fields']['field_departure_schedule']['click_sort_column'] = 'date';
   $handler->display->display_options['fields']['field_departure_schedule']['type'] = 'field_schedule_info';
   $handler->display->display_options['fields']['field_departure_schedule']['delta_offset'] = '0';
+  /* Field: Content: Country */
+  $handler->display->display_options['fields']['field_country']['id'] = 'field_country';
+  $handler->display->display_options['fields']['field_country']['table'] = 'field_data_field_country';
+  $handler->display->display_options['fields']['field_country']['field'] = 'field_country';
+  $handler->display->display_options['fields']['field_country']['relationship'] = 'field_departure_schedule_destination';
+  /* Field: Content: Photos */
+  $handler->display->display_options['fields']['field_photos']['id'] = 'field_photos';
+  $handler->display->display_options['fields']['field_photos']['table'] = 'field_data_field_photos';
+  $handler->display->display_options['fields']['field_photos']['field'] = 'field_photos';
+  $handler->display->display_options['fields']['field_photos']['relationship'] = 'field_departure_schedule_destination';
+  $handler->display->display_options['fields']['field_photos']['click_sort_column'] = 'fid';
+  $handler->display->display_options['fields']['field_photos']['settings'] = array(
+    'image_style' => 'medium',
+    'image_link' => '',
+  );
+  $handler->display->display_options['fields']['field_photos']['delta_offset'] = '0';
   /* Sort criterion: Content: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
@@ -89,6 +118,9 @@ function vacations_excursions_views_default_views() {
     t('‹ previous'),
     t('next ›'),
     t('last »'),
+    t('Destination'),
+    t('Country'),
+    t('Photos'),
     t('Page'),
   );
   $export['excursion_info'] = $view;
