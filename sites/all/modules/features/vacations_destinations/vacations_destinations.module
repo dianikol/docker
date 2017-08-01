@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Vacations Destinations feature.
+ */
+
+include_once 'vacations_destinations.features.inc';
