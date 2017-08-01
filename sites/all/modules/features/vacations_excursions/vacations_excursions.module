@@ -176,6 +176,10 @@ function vacations_excursions_field_formatter_info() {
       'label' => t('Schedule'),
       'field types' => array('field_schedule'),
     ),
+    'field_schedule_info' => array(
+      'label' => t('Schedule Info'),
+      'field types' => array('field_schedule'),
+    ),
   );
 }
 
@@ -207,6 +211,17 @@ function vacations_excursions_field_formatter_view($entity_type, $entity, $field
       }
 
     break;
+    case 'field_schedule_info':
+      foreach ($items as $delta => $item) {
+        $element[$delta] = array(
+          '#type' => 'html_tag',
+          '#tag' => 'p',
+          '#value' => t('<strong>Duration:</strong><br>%duration days<br><strong>Date:</strong>%date', array(
+              '%date' => substr($item['date'], 0, 10),
+              '%duration' => $item['duration'],
+            )),
+        );
+      }
   }
 
   return $element;
