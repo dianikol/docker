@@ -202,7 +202,7 @@ function vacations_excursions_field_formatter_view($entity_type, $entity, $field
         $element[$delta] = array(
           '#type' => 'html_tag',
           '#tag' => 'p',
-          '#value' => t('Date: %date <br> Duration: %duration days<br> Destination: %destination <br> Brochure: ', array(
+          '#value' => t('Date: %date<br>Duration: %duration days<br>Destination: %destination<br>Brochure: ', array(
             '%date' => substr($item['date'], 0, 10),
             '%duration' => $item['duration'],
             '%destination' => $destination[$item['destination']]->title,
@@ -222,6 +222,8 @@ function vacations_excursions_field_formatter_view($entity_type, $entity, $field
             )),
         );
       }
+
+    break;
   }
 
   return $element;
