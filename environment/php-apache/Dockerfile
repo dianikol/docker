@@ -22,3 +22,12 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN a2enmod rewrite && service apache2 restart
+
+RUN a2enmod ssl
+RUN service apache2 restart
+RUN mkdir /etc/apache2/ssl
+ADD ./apache.crt /etc/apache2/ssl/
+ADD ./apache.key /etc/apache2/ssl/
+ADD ./default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
+RUN a2ensite default-ssl.conf
+RUN service apache2 restart

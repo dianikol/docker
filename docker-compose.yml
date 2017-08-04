@@ -18,6 +18,8 @@ services:
             - 443:443
         volumes:
             - .:/var/www/thomas
+            - ./cert:/etc/apache2/ssl
+            - ./environment/php-apache/default-ssl.conf:/etc/apache2/sites-available/default-ssl.conf
             - ./environment/php-apache/ssmtp.conf:/etc/ssmtp/ssmtp.conf
             - ./environment/php-apache/php.ini:/usr/local/etc/php/php.ini
             - ./environment/php-apache/apache-config.conf:/etc/apache2/sites-enabled/000-default.conf
